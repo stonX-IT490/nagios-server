@@ -10,7 +10,7 @@ sudo apt full-upgrade -y
 sudo apt autoremove -y --purge
 
 # Install required packages
-sudo apt install -y ufw php-amqp php-bcmath php-cli php-common php-curl php-fpm php-json php-mbstring php-mysql php-readline php-opcache php-gmp php-zip nginx wget unzip inotify-tools 
+sudo apt install -y ufw vim wget curl build-essential unzip openssl libssl-dev apache2 php libapache2-mod-php php-gd libgd-dev
 
 # Setup firewall
 sudo ufw --force enable
@@ -32,7 +32,6 @@ chmod +x deploy.sh
 cd ~/
 
 # Setup Nagios Server
-sudo apt install -y vim wget curl build-essential unzip openssl libssl-dev apache2 php libapache2-mod-php php-gd libgd-dev
 cd ~
 export VER="4.4.7"
 wget https://github.com/NagiosEnterprises/nagioscore/releases/download/nagios-$VER/nagios-$VER.tar.gz
@@ -73,14 +72,15 @@ sudo make check_nrpe
 sudo make install-plugin
 
 # Configuring Nagios
-echo "cfg_dir=/usr/local/nagios/etc/servers" >> /usr/local/nagios/etc/nagios.cfg
+echo 'cfg_dir=/usr/local/nagios/etc/servers' >> /usr/local/nagios/etc/nagios.cfg
 sudo mkdir /usr/local/nagios/etc/servers
 touch /usr/local/nagios/etc/objects/contacts.cfg
 
-echo "define command{
+echo '
+define command{
         command_name check_nrpe
         command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
-}" >> /usr/local/nagios/etc/objects/commands.cfg
+}' >> /usr/local/nagios/etc/objects/commands.cfg
 
 
 # Allow Nagios in Firewall
