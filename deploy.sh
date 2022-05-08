@@ -87,7 +87,7 @@ define command{
 echo 'command[check_service]=sudo /usr/local/nagios/libexec/check_service -s $ARG1$'
 echo '' > /usr/local/nagios/etc/objects/localhost.cfg
 
-sudo cp -r $pwd/config/ /usr/local/nagios/etc/servers/
+sudo cp $pwd/config/* /usr/local/nagios/etc/servers/
 
 # Allow Nagios in Firewall
 sudo ufw allow 80
