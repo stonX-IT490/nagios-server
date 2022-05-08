@@ -14,6 +14,25 @@ sudo apt autoremove -y --purge
 # Install required packages
 sudo apt install -y ufw vim wget curl build-essential unzip openssl libssl-dev apache2 php libapache2-mod-php php-gd libgd-dev unzip php-bcmath php-amqp php-curl php-cli php-zip php-mbstring
 
+# Setup firewall
+sudo ufw --force enable
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Install zerotier
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+curl -s https://install.zerotier.com | sudo bash
+
+# Setup Central Logging
+git clone git@github.com:stonX-IT490/logging.git ~/logging
+cd ~/logging
+chmod +x deploy.sh
+./deploy.sh
+cd ~/
+
 # Setup Nagios Server
 cd ~
 export VER="4.4.7"
