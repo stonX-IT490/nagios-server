@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pwd=`pwd`
+
 # Update repos
 sudo apt update
 
@@ -10,7 +12,7 @@ sudo apt full-upgrade -y
 sudo apt autoremove -y --purge
 
 # Install required packages
-sudo apt install -y ufw vim wget curl build-essential unzip openssl libssl-dev apache2 php libapache2-mod-php php-gd libgd-dev
+sudo apt install -y ufw vim wget curl build-essential unzip openssl libssl-dev apache2 php libapache2-mod-php php-gd libgd-dev unzip php-bcmath php-amqp php-curl php-cli php-zip php-mbstring
 
 # Setup firewall
 sudo ufw --force enable
@@ -82,6 +84,10 @@ define command{
         command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
 }' >> /usr/local/nagios/etc/objects/commands.cfg
 
+echo 'command[check_service]=sudo /usr/local/nagios/libexec/check_service -s $ARG1$'
+echo '' > /usr/local/nagios/etc/objects/localhost.cfg
+
+sudo cp -r $pwd/config/ /usr/local/nagios/etc/servers/
 
 # Allow Nagios in Firewall
 sudo ufw allow 80
